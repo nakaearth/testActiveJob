@@ -10,6 +10,8 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    HelloJob.enqueue 'ほげほげほげ'
+    HelloJob.enqueue_in 1.minute, 'うごうぐぐ'
   end
 
   # GET /users/new
@@ -28,10 +30,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        job = HelloJob.new(@user)
-        job.enqueue @user
-        HelloJob.set(wait: 1.minute).perform_later(@user)
-        job.perform_later wait: 1.minutes
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else

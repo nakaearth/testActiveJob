@@ -1,8 +1,10 @@
 class HelloJob < ActiveJob::Base
-  queue_as :default
+  queue_as :my_job
 
-  def perform(*args)
+  def perform(message = 'test')
     # Do something later
-    args[0].hello
+    p message
+    puts message
+    logger.info "Dummy: #{message}"
   end
 end
