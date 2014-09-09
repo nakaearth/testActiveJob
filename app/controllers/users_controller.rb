@@ -28,8 +28,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        HelloJob.new.perform @user
-        HelloJob.new.perform @user, wait: 1.minutes
+        job = HelloJob.new(@user)
+        job.enqueue @user
+        HelloJob.set(wait: 1.minute).perform_later(@user)
+        job.perform_later wait: 1.minutes
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
