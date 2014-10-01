@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   def hello message = 'test'
     puts message
   end

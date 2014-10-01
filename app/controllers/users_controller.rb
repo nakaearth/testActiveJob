@@ -10,8 +10,11 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    HelloJob.enqueue 'ほげほげほげ'
-    HelloJob.enqueue_in 1.minute, 'うごうぐぐ'
+    User.find_by(name: 'test')
+    User.find_by(name: 'test2')
+    HelloJob.perform_later 'ほげほげほげ'
+    HelloJob.set(wait: 1.minute).perform_later 'うごうぐぐ'
+#    TestJob.enqueue @user   
   end
 
   # GET /users/new
@@ -61,6 +64,9 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def console
   end
 
   private
